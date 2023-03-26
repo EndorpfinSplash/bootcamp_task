@@ -2,11 +2,19 @@ package com.bootcamp.userendpoint.services;
 
 import com.bootcamp.userendpoint.model.User;
 import com.bootcamp.userendpoint.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+
 @Service
 public class UserService {
+    @Value("${custom.options.user_sorting_order}")
+    private String SORT_USER_FIELDS;
+
+    @Value("${custom.options.page_size}")
+    private int PAGE_SIZE;
     private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
@@ -14,14 +22,14 @@ public class UserService {
     }
 
     public Iterable<User> getAllUsers() {
-        return userRepository.findAll(Sort.by("email"));
+        return userRepository.findAll(PageRequest.of(0, PAGE_SIZE, Sort.by(SORT_USER_FIELDS)));
     }
 
-    public void saveUser(String surname,
+    public User saveUser(String surname,
                          String name,
                          String patronymic,
                          String email,
                          String role) {
-        userRepository.save(new User(surname, name, patronymic, email, role));
+        return userRepository.save(new User(surname, name, patronymic, email, role));
     }
 }
