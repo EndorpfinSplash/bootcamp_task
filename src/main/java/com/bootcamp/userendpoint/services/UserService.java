@@ -2,6 +2,7 @@ package com.bootcamp.userendpoint.services;
 
 import com.bootcamp.userendpoint.model.User;
 import com.bootcamp.userendpoint.repositories.UserRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,7 +14,7 @@ public class UserService {
     }
 
     public Iterable<User> getAllUsers() {
-        return userRepository.findAll();
+        return userRepository.findAll(Sort.by("email"));
     }
 
     public void saveUser(String surname,
