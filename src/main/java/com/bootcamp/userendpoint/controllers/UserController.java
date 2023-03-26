@@ -39,7 +39,7 @@ public class UserController {
             throw new RoleNotFoundException();
         }
 
-        userService.saveUser(
+        User savedUser = userService.saveUser(
                 user.getSurname(),
                 user.getName(),
                 user.getPatronymic(),
@@ -48,7 +48,7 @@ public class UserController {
 
         return ResponseEntity
                 .status(HttpStatus.ACCEPTED)
-                .body(user);
+                .body(savedUser);
     }
 
     @GetMapping("/users")
