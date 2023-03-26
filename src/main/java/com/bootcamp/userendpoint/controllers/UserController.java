@@ -1,0 +1,59 @@
+package com.bootcamp.userendpoint.controllers;
+
+import com.bootcamp.userendpoint.exceptions.InvalidEmailAddressException;
+import com.bootcamp.userendpoint.exceptions.RoleNotFoundException;
+import com.bootcamp.userendpoint.model.Role;
+import com.bootcamp.userendpoint.model.User;
+import com.bootcamp.userendpoint.services.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
+
+@RestController
+public class UserController {
+
+    String EMAIL_PATTERN = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+    Pattern EMAIL_MATCHER = Pattern.compile(EMAIL_PATTERN);
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @PostMapping("/user")
+    public ResponseEntity<User> saveUser(
+            @RequestBody User user
+    ) {
+
+        String email = user.getEmail();
+        if (!EMAIL_MATCHER.matcher(email).matches()) {
+            throw new InvalidEmailAddressException();
+        }
+
+        String role = user.getRole();
+        if (Stream.of(Role.values()).noneMatch(r -> r.getRole().equals(role))) {
+            throw new RoleNotFoundException();
+        }
+
+        userService.saveUser(
+                user.getSurname(),
+                user.getName(),
+                user.getPatronymic(),
+                email,
+                role);
+
+        return ResponseEntity
+                .status(HttpStatus.ACCEPTED)
+                .body(user);
+    }
+
+    @GetMapping("/users")
+    public Iterable<User> getAllUsers() {
+        return userService.getAllUsers();
+    }
+
+}
