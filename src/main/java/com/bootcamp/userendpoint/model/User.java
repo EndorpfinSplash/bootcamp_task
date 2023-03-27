@@ -1,38 +1,46 @@
 package com.bootcamp.userendpoint.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "users",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
+@JsonPropertyOrder({"ФИО", "Email", "Role"})
 public class User {
     @Id
-
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true, length = 10)
     private long id;
     @Column(name = "surname", length = 40, nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY , value = "Фамилия")
     private String surname;
     @Column(name = "name", length = 20, nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY, value = "Имя")
     private String name;
     @Column(name = "patronymic", length = 40, nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY, value = "Отчество")
     private String patronymic;
     @Column(name = "email", length = 50, nullable = false, unique = true)
+    @JsonProperty("Email")
     private String email;
     @Column(name = "role", length = 50, nullable = false)
+    @JsonProperty("Role")
     private String role;
 
-    public User(String surname, String name, String patronymic, String email, String role) {
-        this.surname = surname;
-        this.name = name;
-        this.patronymic = patronymic;
-        this.email = email;
-        this.role = role;
+
+    @JsonProperty(value = "ФИО")
+    public String getFIO() {
+        return surname + ' ' + name + ' ' + patronymic;
     }
 
     public User() {
     }
 
+    @JsonIgnore
     public long getId() {
         return id;
     }
@@ -41,6 +49,8 @@ public class User {
         this.id = id;
     }
 
+
+    @JsonIgnore
     public String getSurname() {
         return surname;
     }
@@ -49,6 +59,7 @@ public class User {
         this.surname = surname;
     }
 
+    @JsonIgnore
     public String getName() {
         return name;
     }
@@ -57,6 +68,7 @@ public class User {
         this.name = name;
     }
 
+    @JsonIgnore
     public String getPatronymic() {
         return patronymic;
     }

@@ -25,11 +25,7 @@ public class UserService {
         return userRepository.findAll(PageRequest.of(0, PAGE_SIZE, Sort.by(SORT_USER_FIELDS)));
     }
 
-    public User saveUser(String surname,
-                         String name,
-                         String patronymic,
-                         String email,
-                         String role) {
-        return userRepository.save(new User(surname, name, patronymic, email, role));
+    public User saveUser(User user) {
+        return userRepository.save(user);
     }
 }
