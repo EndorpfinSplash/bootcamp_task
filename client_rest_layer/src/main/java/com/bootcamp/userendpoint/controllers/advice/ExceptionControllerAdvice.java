@@ -1,7 +1,6 @@
 package com.bootcamp.userendpoint.controllers.advice;
 
 import com.bootcamp.userendpoint.exceptions.*;
-import com.bootcamp.userendpoint.model.ErrorDetails;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
