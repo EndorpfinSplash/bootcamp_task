@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import javax.sql.DataSource;
 
 @Configuration
-public class ProjectConfig {
+public class DataBaseConfig {
 
     @Value("${custom.datasource.url}")
     private String datasourceUrl;
