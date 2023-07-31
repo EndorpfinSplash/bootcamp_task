@@ -7,7 +7,7 @@ public enum Role {
     CUSTOMER_USER("Customer User"),
     SECURE_API_USER("Secure API User");
 
-    private String role;
+    private final String role;
 
     Role(String role) {
         this.role = role;
