@@ -1,0 +1,62 @@
+databaseChangeLog:
+  - logicalFilePath: db/changelog/db.changelog-lesson1.yaml
+  - changeSet:
+      id: 1
+      author: bootcamp_user
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: surname
+                  type: varchar(40)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(20)
+              - column:
+                  name: patronymic
+                  type: varchar(40)
+              - column:
+                  name: email
+                  type: varchar(50)
+              - column:
+                  name: role
+                  type: varchar(50)
+  - changeSet:
+      id: 2
+      author: bootcamp_user
+      comment: "Create one user"
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: surname
+                  value: "Zinovich"
+              - column:
+                  name: name
+                  value: "Andrey"
+              - column:
+                  name: patronymic
+                  value: "Vasilevich"
+              - column:
+                  name: email
+                  value: "fast.optimus@gmail.com"
+              - column:
+                  name: "role"
+                  value: "Administrator"
+
+      rollback:
+        - delete:
+            tableName: users
+            where: email in ('fast.optimus@gmail.com')
