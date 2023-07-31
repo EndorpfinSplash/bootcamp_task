@@ -24,9 +24,8 @@ public class UserModelService {
         return userModelMapper.toModelList(userEntityRepository.findAll());
     }
     public Iterable<UserModel> getAllUsers(PageRequest of) {
-        return userModelMapper.toModelList(userEntityRepository.findAll());
+        return userModelMapper.toModelList(userEntityRepository.findAll(of));
     }
-
 
     public UserModel saveUser(UserModel userModel) {
         return userModelMapper.toModel(

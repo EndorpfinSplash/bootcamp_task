@@ -12,6 +12,6 @@ public interface UserModelMapper {
     UserEntity toEntity(UserModel model);
     UserModel toModel(UserEntity entity);
 
-    Iterable<UserModel> toModelList(List<UserEntity> userEntities);
-    List<UserEntity> toEntityList(List<UserModel> userModels);
+    Iterable<UserModel> toModelList(Iterable<UserEntity> userEntities);
+    Iterable<UserEntity> toEntityList(Iterable<UserModel> userModels);
 }
