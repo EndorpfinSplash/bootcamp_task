@@ -1,4 +1,4 @@
-package com.bootcamp.userendpoint.model;
+package com.bootcamp.userendpoint.exceptions;
 
 public class ErrorDetails {
 

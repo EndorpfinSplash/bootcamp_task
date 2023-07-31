@@ -1,7 +1,8 @@
-package com.bootcamp.userendpoint.controllers.advice;
+package com.bootcamp.userendpoint.exceptions.advice;
 
-import com.bootcamp.userendpoint.exceptions.*;
-import com.bootcamp.userendpoint.model.ErrorDetails;
+import com.bootcamp.userendpoint.exceptions.ErrorDetails;
+import com.bootcamp.userendpoint.exceptions.InvalidEmailAddressException;
+import com.bootcamp.userendpoint.exceptions.RoleNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

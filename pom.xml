@@ -15,8 +15,9 @@
     <name>userendpoint</name>
     <description>userendpoint</description>
     <modules>
-        <module>db_layer</module>
-        <module>service_layer</module>
+        <module>1-db_layer</module>
+        <module>2-service_layer</module>
+        <module>3-customer_rest_layer</module>
     </modules>
     <properties>
         <java.version>17</java.version>
