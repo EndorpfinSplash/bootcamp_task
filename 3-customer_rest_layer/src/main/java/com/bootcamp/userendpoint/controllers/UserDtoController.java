@@ -3,8 +3,8 @@ package com.bootcamp.userendpoint.controllers;
 import com.bootcamp.userendpoint.exceptions.InvalidEmailAddressException;
 import com.bootcamp.userendpoint.exceptions.RoleNotFoundException;
 import com.bootcamp.userendpoint.model.Role;
-import com.bootcamp.userendpoint.model.User;
-import com.bootcamp.userendpoint.services.UserService;
+import com.bootcamp.userendpoint.services.UserModelService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 @RestController
-public class UserController {
+public class UserDtoController {
 
     @Value("${custom.options.user_sorting_order}")
     private String SORT_USER_FIELDS;
@@ -29,28 +29,30 @@ public class UserController {
 
     String EMAIL_PATTERN = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
     Pattern EMAIL_MATCHER = Pattern.compile(EMAIL_PATTERN);
-    private final UserService userService;
+    private final UserModelService userModelService;
+    @Autowired
+    private UserDtoMapper userDtoMapper;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserDtoController(UserModelService userService) {
+        this.userModelService = userService;
     }
 
     @PostMapping("/user")
-    public ResponseEntity<User> saveUser(
-            @RequestBody User user
+    public ResponseEntity<UserDto> saveUser(
+            @RequestBody UserDto userDto
     ) {
 
-        String email = user.getEmail();
+        String email = userDto.getEmail();
         if (!EMAIL_MATCHER.matcher(email).matches()) {
             throw new InvalidEmailAddressException();
         }
 
-        String role = user.getRole();
+        String role = userDto.getRole();
         if (Stream.of(Role.values()).noneMatch(r -> r.getRole().equals(role))) {
             throw new RoleNotFoundException();
         }
 
-        User savedUser = userService.saveUser(user);
+        UserDto savedUser = userDtoMapper.toDto(userModelService.saveUser(userDtoMapper.toModel(userDto)));
 
         return ResponseEntity
                 .status(HttpStatus.ACCEPTED)
@@ -58,8 +60,8 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public Iterable<User> getAllUsers() {
-        return userService.getAllUsers(PageRequest.of(0, PAGE_SIZE, Sort.by(SORT_USER_FIELDS)));
+    public Iterable<UserDto> getAllUsers() {
+        return userDtoMapper.toDtoList(userModelService.getAllUsers(PageRequest.of(0, PAGE_SIZE, Sort.by(SORT_USER_FIELDS))));
     }
 
 }
