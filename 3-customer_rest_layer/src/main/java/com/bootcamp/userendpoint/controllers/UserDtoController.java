@@ -1,7 +1,6 @@
 package com.bootcamp.userendpoint.controllers;
 
-import com.bootcamp.userendpoint.exceptions.InvalidEmailAddressException;
-import com.bootcamp.userendpoint.exceptions.RoleNotFoundException;
+import com.bootcamp.userendpoint.exceptions.*;
 import com.bootcamp.userendpoint.model.Role;
 import com.bootcamp.userendpoint.services.UserModelService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,9 +47,15 @@ public class UserDtoController {
         }
 
         String role = userDto.getRole();
-        if (Stream.of(Role.values()).noneMatch(r -> r.getRole().toLowerCase().equals(role.toLowerCase()))) {
+        if (Stream.of(Role.values()).noneMatch(r -> r.getRole().equalsIgnoreCase(role))) {
             throw new RoleNotFoundException();
         }
+
+        String username = userDto.getName();
+        if (username == null || username.isEmpty()  || username.trim().isEmpty()){
+            throw new EmptyDataException();
+        }
+
 
         UserDto savedUser = userDtoMapper.toDto(userModelService.saveUser(userDtoMapper.toModel(userDto)));
 

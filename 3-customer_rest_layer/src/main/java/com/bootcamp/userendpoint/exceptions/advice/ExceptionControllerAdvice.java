@@ -1,5 +1,6 @@
 package com.bootcamp.userendpoint.exceptions.advice;
 
+import com.bootcamp.userendpoint.exceptions.EmptyDataException;
 import com.bootcamp.userendpoint.exceptions.ErrorDetails;
 import com.bootcamp.userendpoint.exceptions.InvalidEmailAddressException;
 import com.bootcamp.userendpoint.exceptions.RoleNotFoundException;
@@ -31,6 +32,15 @@ public class ExceptionControllerAdvice {
         errorDetails.setMessage("Received role is absent! Please choose one of the roles from the list: " +
                 Arrays.stream(Role.values()).map(Role::getRole)
                         .collect(Collectors.joining(", ")));
+        return ResponseEntity
+                .badRequest()
+                .body(errorDetails);
+    }
+
+    @ExceptionHandler(EmptyDataException.class)
+    public ResponseEntity<ErrorDetails> exceptionEmptyDataHandler() {
+        ErrorDetails errorDetails = new ErrorDetails();
+        errorDetails.setMessage("Please enter a name.");
         return ResponseEntity
                 .badRequest()
                 .body(errorDetails);
