@@ -48,7 +48,7 @@ public class UserDtoController {
         }
 
         String role = userDto.getRole();
-        if (Stream.of(Role.values()).noneMatch(r -> r.getRole().equals(role))) {
+        if (Stream.of(Role.values()).noneMatch(r -> r.getRole().toLowerCase().equals(role.toLowerCase()))) {
             throw new RoleNotFoundException();
         }
 
