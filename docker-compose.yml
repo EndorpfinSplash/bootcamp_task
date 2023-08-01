@@ -1,13 +1,40 @@
 version: '3'
 
 services:
-  mysql:
+  db_service:
     image: mysql:8.0
-    volumes:
-      - todo-mysql-data:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: secret
-      MYSQL_DATABASE: todos
+    container_name: 'Container_with_DB_MySQL'
+    restart: always
 
-#  volumes:
-#    todo-mysql-data:
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: bootcamp_schema
+      MYSQL_USER: bootcamp_user
+      MYSQL_PASSWORD: Bootcamp_password
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/MYSQL_DATABASE
+      SPRING_DATABASE_USERNAME: bootcamp_user
+      SPRING_DATABASE_PASSWORD: Bootcamp_password
+
+    ports:
+      - "3366:3306"
+    volumes:
+      - db_service:/var/lib/mysql
+      - ./1-db_layer/src/main/resources/db/init.sql:/data/application/init.sql
+
+  app_service:
+    build: ./
+    container_name: 'Container_with_Spring_boot_Appl_for_Bootcamp'
+    ports:
+      - "8085:8080"
+    environment:
+      MYSQL_HOST: 'Container_with_DB_MySQL'
+      MYSQL_USER: bootcamp_user
+      MYSQL_PASSWORD: Bootcamp_password
+      MYSQL_PORT: 3306
+    depends_on:
+      - db_service
+
+volumes:
+  db_service:
+    driver: local
+
