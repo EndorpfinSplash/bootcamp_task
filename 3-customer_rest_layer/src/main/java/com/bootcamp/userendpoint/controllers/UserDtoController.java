@@ -28,6 +28,8 @@ public class UserDtoController {
 
     String EMAIL_PATTERN = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
     Pattern EMAIL_MATCHER = Pattern.compile(EMAIL_PATTERN);
+    String LATIN_PATTERN = "^[A-Za-z ]*$";
+    Pattern LATIN_MATCHER = Pattern.compile(LATIN_PATTERN);
     private final UserModelService userModelService;
     @Autowired
     private UserDtoMapper userDtoMapper;
@@ -40,6 +42,15 @@ public class UserDtoController {
     public ResponseEntity<UserDto> saveUser(
             @RequestBody UserDto userDto
     ) {
+        String username = userDto.getName();
+        if (username == null || username.isEmpty() || username.trim().isEmpty()){
+            throw new EmptyDataException();
+        }
+
+        if (!LATIN_MATCHER.matcher(userDto.getFIO()).matches()
+        ) {
+            throw new NonLatinAlphabetException();
+        }
 
         String email = userDto.getEmail();
         if (!EMAIL_MATCHER.matcher(email).matches()) {
@@ -51,10 +62,7 @@ public class UserDtoController {
             throw new RoleNotFoundException();
         }
 
-        String username = userDto.getName();
-        if (username == null || username.isEmpty()  || username.trim().isEmpty()){
-            throw new EmptyDataException();
-        }
+
 
 
         UserDto savedUser = userDtoMapper.toDto(userModelService.saveUser(userDtoMapper.toModel(userDto)));

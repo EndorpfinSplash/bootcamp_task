@@ -1,9 +1,6 @@
 package com.bootcamp.userendpoint.exceptions.advice;
 
-import com.bootcamp.userendpoint.exceptions.EmptyDataException;
-import com.bootcamp.userendpoint.exceptions.ErrorDetails;
-import com.bootcamp.userendpoint.exceptions.InvalidEmailAddressException;
-import com.bootcamp.userendpoint.exceptions.RoleNotFoundException;
+import com.bootcamp.userendpoint.exceptions.*;
 import com.bootcamp.userendpoint.model.Role;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -41,6 +38,15 @@ public class ExceptionControllerAdvice {
     public ResponseEntity<ErrorDetails> exceptionEmptyDataHandler() {
         ErrorDetails errorDetails = new ErrorDetails();
         errorDetails.setMessage("Please enter a name.");
+        return ResponseEntity
+                .badRequest()
+                .body(errorDetails);
+    }
+
+    @ExceptionHandler(NonLatinAlphabetException.class)
+    public ResponseEntity<ErrorDetails> exceptionNonLatinAlphabetHandler() {
+        ErrorDetails errorDetails = new ErrorDetails();
+        errorDetails.setMessage("Please use only the Latin alphabet for your name details");
         return ResponseEntity
                 .badRequest()
                 .body(errorDetails);
